@@ -1,1 +1,77 @@
+CREATE DATABASE POLLOS_COPA;
+USE POLLOS_COPA;
 
+CREATE TABLE cliente(
+id_cliente INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+fulname VARCHAR(50) NOT NULL,
+lastname VARCHAR(50) NOT NULL,
+edad INTEGER NOT NULL,
+domicilio VARCHAR(100) NOT NULL
+);
+
+INSERT INTO cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALUES ('01','Miguel' ,'Gonzales Veliz', 20,'Av. 6 de Agosto');
+INSERT INTO cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALUES ('02','Sandra' ,'Mavir Uria', 25,'Av.Salaeda');
+INSERT INTO cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALUES ('03','Joel' ,'Adubiri Mondar', 30,'plaza.santiago');
+INSERT INTO cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALUES ('04','Andrea' ,'Arias Ballesteros','35','Av. boliv');
+INSERT INTO cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALUES ('05','Santos' ,'Montes Valenzuela', 24,'Av. 6 de Octubre');
+
+SELECT est.*
+FROM cliente AS est;
+
+CREATE TABLE pedido(
+    id_pedido INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,
+    articulo VARCHAR(50) NOT NULL,
+    costo NUMERIC(10) NOT NULL,
+    fecha INTEGER NOT NULL
+);
+
+
+CREATE TABLE detallepedido(
+id_detalle_pedido INTEGER AUTO_INCREMENT PRIMARY KEY  NOT NULL,
+id_cliente INTEGER NOT NULL,
+id_pedido INTEGER NOT NULL,
+  FOREIGN KEY (id_cliente)REFERENCES cliente(id_cliente),
+  FOREIGN KEY (id_pedido)REFERENCES pedido(id_pedido)
+);
+
+INSERT INTO pedido (articulo,costo,fecha) VALUES (21,100,15-22);
+INSERT INTO pedido (articulo,costo,fecha) VALUES (22,110,16-22);
+INSERT INTO pedido (articulo,costo,fecha) VALUES (23,112,17-22);
+INSERT INTO pedido (articulo,costo,fecha) VALUES (24,220,18-22);
+INSERT INTO pedido (articulo,costo,fecha) VALUES (25,213,19-22);
+
+SELECT est.id_cliente,
+       est.fulname,
+       est.lastname,
+       mat.articulo,
+       mat.costo,
+       mat.fecha
+FROM cliente AS est
+       INNER JOIN detallepedido AS ins ON est.id_cliente = ins.id_detalle_pedido
+       INNER JOIN pedido AS mat ON ins.id_pedido = mat.id_pedido
+WHERE mat.costo = 100;
+
+SELECT count(est.id_cliente)
+FROM cliente AS est;
+
+SELECT AVG(est.edad)
+FROM cliente AS est;
+
+SELECT MAX(est.edad)
+FROM cliente AS est;
+
+SELECT MIN(est.edad)
+FROM cliente AS est;
+
+#Agrupar por id_est y mostrar el
+#promedio del id_mat en la tabla
+#inscripcion
+
+SELECT ins.id_cliente, AVG(ins.id_pedido)
+FROM detallepedido AS ins
+GROUP BY ins.id_cliente;
